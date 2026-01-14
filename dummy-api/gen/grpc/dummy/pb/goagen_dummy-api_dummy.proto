@@ -1,0 +1,82 @@
+// Code generated with goa v3.23.4, DO NOT EDIT.
+//
+// dummy protocol buffer definition
+//
+// Command:
+// $ goa gen github.com/vidwadeseram/go-boilerplate/dummy-api/design
+
+syntax = "proto3";
+
+package dummy;
+
+option go_package = "/dummypb";
+
+// CRUD operations on items that rely on identity-api for auth
+service Dummy {
+	// CreateItem implements create_item.
+	rpc CreateItem (CreateItemRequest) returns (CreateItemResponse);
+	// ListItems implements list_items.
+	rpc ListItems (ListItemsRequest) returns (ListItemsResponse);
+	// GetItem implements get_item.
+	rpc GetItem (GetItemRequest) returns (GetItemResponse);
+	// DeleteItem implements delete_item.
+	rpc DeleteItem (DeleteItemRequest) returns (DeleteItemResponse);
+}
+
+message CreateItemRequest {
+	string name = 2;
+	optional string description = 3;
+	// Bearer token
+	string token = 1;
+}
+
+message CreateItemResponse {
+	// Item identifier
+	string id = 1;
+	string name = 2;
+	optional string description = 3;
+	string owner_id = 4;
+	string created_at = 5;
+}
+
+message ListItemsRequest {
+	// Bearer token
+	string token = 1;
+}
+
+message ListItemsResponse {
+	repeated Item items = 1;
+}
+
+message Item {
+	// Item identifier
+	string id = 1;
+	string name = 2;
+	optional string description = 3;
+	string owner_id = 4;
+	string created_at = 5;
+}
+
+message GetItemRequest {
+	string id = 2;
+	// Bearer token
+	string token = 1;
+}
+
+message GetItemResponse {
+	// Item identifier
+	string id = 1;
+	string name = 2;
+	optional string description = 3;
+	string owner_id = 4;
+	string created_at = 5;
+}
+
+message DeleteItemRequest {
+	string id = 2;
+	// Bearer token
+	string token = 1;
+}
+
+message DeleteItemResponse {
+}

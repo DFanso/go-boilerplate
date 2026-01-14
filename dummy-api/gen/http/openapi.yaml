@@ -1,0 +1,219 @@
+swagger: "2.0"
+info:
+    title: Dummy Service
+    description: Reference CRUD microservice that enforces identity auth
+    version: 0.0.1
+host: localhost:8082
+consumes:
+    - application/json
+    - application/xml
+    - application/gob
+produces:
+    - application/json
+    - application/xml
+    - application/gob
+paths:
+    /openapi.json:
+        get:
+            tags:
+                - dummy
+            summary: Download gen/http/openapi.json
+            operationId: dummy#/openapi.json
+            responses:
+                "200":
+                    description: File downloaded
+                    schema:
+                        type: file
+            schemes:
+                - http
+    /v1/dummy/items:
+        get:
+            tags:
+                - dummy
+            summary: list_items dummy
+            operationId: dummy#list_items
+            parameters:
+                - name: Authorization
+                  in: header
+                  description: Bearer token
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/ItemsCollection'
+                        required:
+                            - items
+            schemes:
+                - http
+        post:
+            tags:
+                - dummy
+            summary: create_item dummy
+            operationId: dummy#create_item
+            parameters:
+                - name: Authorization
+                  in: header
+                  description: Bearer token
+                  required: true
+                  type: string
+                - name: create_item_request_body
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/CreateItemPayload'
+                    required:
+                        - name
+            responses:
+                "201":
+                    description: Created response.
+                    schema:
+                        $ref: '#/definitions/DummyItem'
+            schemes:
+                - http
+    /v1/dummy/items/{id}:
+        get:
+            tags:
+                - dummy
+            summary: get_item dummy
+            operationId: dummy#get_item
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  type: string
+                - name: Authorization
+                  in: header
+                  description: Bearer token
+                  required: true
+                  type: string
+            responses:
+                "200":
+                    description: OK response.
+                    schema:
+                        $ref: '#/definitions/DummyItem'
+            schemes:
+                - http
+        delete:
+            tags:
+                - dummy
+            summary: delete_item dummy
+            operationId: dummy#delete_item
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  type: string
+                - name: Authorization
+                  in: header
+                  description: Bearer token
+                  required: true
+                  type: string
+            responses:
+                "204":
+                    description: No Content response.
+            schemes:
+                - http
+definitions:
+    CreateItemPayload:
+        title: CreateItemPayload
+        type: object
+        properties:
+            description:
+                type: string
+                example: Nam repellat perspiciatis tempore et debitis.
+            name:
+                type: string
+                example: Error non sint officia neque dolorem.
+        example:
+            description: Nam delectus quia.
+            name: Ut quos.
+        required:
+            - name
+    DummyItem:
+        title: 'Mediatype identifier: application/vnd.dummy.item; view=default'
+        type: object
+        properties:
+            created_at:
+                type: string
+                example: "1996-02-26T07:47:44Z"
+                format: date-time
+            description:
+                type: string
+                example: Est qui molestias iusto inventore atque.
+            id:
+                type: string
+                description: Item identifier
+                example: Corrupti blanditiis qui assumenda assumenda voluptatum nihil.
+            name:
+                type: string
+                example: Quasi repudiandae minima occaecati voluptatem optio.
+            owner_id:
+                type: string
+                example: Sit blanditiis odit qui vel.
+        description: create_item_response_body result type (default view)
+        example:
+            created_at: "1987-08-20T16:43:42Z"
+            description: Eos modi facilis saepe et quaerat.
+            id: Commodi commodi omnis dolor.
+            name: Doloremque et voluptatem impedit in.
+            owner_id: Velit itaque laborum ut praesentium rem alias.
+        required:
+            - id
+            - name
+            - owner_id
+            - created_at
+    ItemsCollection:
+        title: ItemsCollection
+        type: object
+        properties:
+            items:
+                type: array
+                items:
+                    $ref: '#/definitions/DummyItem'
+                example:
+                    - created_at: "2002-12-08T21:09:38Z"
+                      description: Odio voluptas veritatis in tempore consequatur.
+                      id: Voluptatem est et eius dignissimos asperiores doloribus.
+                      name: Velit laudantium temporibus magni est.
+                      owner_id: Aliquam id aut itaque et.
+                    - created_at: "2002-12-08T21:09:38Z"
+                      description: Odio voluptas veritatis in tempore consequatur.
+                      id: Voluptatem est et eius dignissimos asperiores doloribus.
+                      name: Velit laudantium temporibus magni est.
+                      owner_id: Aliquam id aut itaque et.
+                    - created_at: "2002-12-08T21:09:38Z"
+                      description: Odio voluptas veritatis in tempore consequatur.
+                      id: Voluptatem est et eius dignissimos asperiores doloribus.
+                      name: Velit laudantium temporibus magni est.
+                      owner_id: Aliquam id aut itaque et.
+                    - created_at: "2002-12-08T21:09:38Z"
+                      description: Odio voluptas veritatis in tempore consequatur.
+                      id: Voluptatem est et eius dignissimos asperiores doloribus.
+                      name: Velit laudantium temporibus magni est.
+                      owner_id: Aliquam id aut itaque et.
+        example:
+            items:
+                - created_at: "2002-12-08T21:09:38Z"
+                  description: Odio voluptas veritatis in tempore consequatur.
+                  id: Voluptatem est et eius dignissimos asperiores doloribus.
+                  name: Velit laudantium temporibus magni est.
+                  owner_id: Aliquam id aut itaque et.
+                - created_at: "2002-12-08T21:09:38Z"
+                  description: Odio voluptas veritatis in tempore consequatur.
+                  id: Voluptatem est et eius dignissimos asperiores doloribus.
+                  name: Velit laudantium temporibus magni est.
+                  owner_id: Aliquam id aut itaque et.
+                - created_at: "2002-12-08T21:09:38Z"
+                  description: Odio voluptas veritatis in tempore consequatur.
+                  id: Voluptatem est et eius dignissimos asperiores doloribus.
+                  name: Velit laudantium temporibus magni est.
+                  owner_id: Aliquam id aut itaque et.
+                - created_at: "2002-12-08T21:09:38Z"
+                  description: Odio voluptas veritatis in tempore consequatur.
+                  id: Voluptatem est et eius dignissimos asperiores doloribus.
+                  name: Velit laudantium temporibus magni est.
+                  owner_id: Aliquam id aut itaque et.
+        required:
+            - items

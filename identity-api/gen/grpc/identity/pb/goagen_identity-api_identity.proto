@@ -1,0 +1,63 @@
+// Code generated with goa v3.23.4, DO NOT EDIT.
+//
+// identity protocol buffer definition
+//
+// Command:
+// $ goa gen github.com/vidwadeseram/go-boilerplate/identity-api/design
+
+syntax = "proto3";
+
+package identity;
+
+option go_package = "/identitypb";
+
+// Operations for user identities
+service Identity {
+	// Registers a new user
+	rpc Register (RegisterRequest) returns (RegisterResponse);
+	// Authenticates a user and issues a JWT
+	rpc Login (LoginRequest) returns (LoginResponse);
+	// Validates a JWT and returns the claims
+	rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+}
+
+message RegisterRequest {
+	string display_name = 3;
+	string email = 1;
+	string password = 2;
+}
+
+message RegisterResponse {
+	// User identifier
+	string id = 1;
+	// Email address
+	string email = 2;
+	// Display name
+	string display_name = 3;
+	// Creation timestamp
+	string created_at = 4;
+}
+
+message LoginRequest {
+	string email = 1;
+	string password = 2;
+}
+
+message LoginResponse {
+	// JWT access token
+	string access_token = 1;
+	// Token expiry window in seconds
+	sint32 expires_in = 2;
+}
+
+message ValidateTokenRequest {
+	// JWT access token
+	string token = 1;
+}
+
+message ValidateTokenResponse {
+	bool valid = 1;
+	optional string user_id = 2;
+	optional string email = 3;
+	optional string reason = 4;
+}

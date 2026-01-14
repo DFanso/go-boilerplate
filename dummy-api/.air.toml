@@ -1,0 +1,12 @@
+root = "."
+tmp_dir = "./tmp"
+
+[build]
+  cmd = "go build -o ./bin/dummy ./cmd/dummy-api"
+  bin = "./bin/dummy"
+  args = ["serve"]
+  exclude_dir = ["gen"]
+  include_ext = ["go"]
+
+[color]
+  main = "yellow"

@@ -1,0 +1,275 @@
+openapi: 3.0.3
+info:
+    title: Identity Service
+    description: User registration, authentication and token validation
+    version: 0.0.1
+servers:
+    - url: http://localhost:8081
+paths:
+    /openapi.json:
+        get:
+            tags:
+                - identity
+            summary: Download gen/http/openapi.json
+            operationId: identity#/openapi.json
+            responses:
+                "200":
+                    description: File downloaded
+    /v1/identity/login:
+        post:
+            tags:
+                - identity
+            summary: login identity
+            description: Authenticates a user and issues a JWT
+            operationId: identity#login
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Credentials'
+                        example:
+                            email: service@example.com
+                            password: changeme123
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TokenResult'
+                            example:
+                                access_token: Eum error.
+                                expires_in: 2764480348096969497
+    /v1/identity/register:
+        post:
+            tags:
+                - identity
+            summary: register identity
+            description: Registers a new user
+            operationId: identity#register
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterPayload'
+                        example:
+                            display_name: Service Admin
+                            email: service@example.com
+                            password: changeme123
+            responses:
+                "201":
+                    description: Created response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/IdentityUser'
+                            example:
+                                created_at: "1986-09-16T11:32:26Z"
+                                display_name: Impedit ad rerum quis tenetur.
+                                email: Magnam soluta laborum veniam doloribus occaecati voluptas.
+                                id: Accusamus nesciunt voluptatibus corrupti assumenda.
+    /v1/identity/validate:
+        post:
+            tags:
+                - identity
+            summary: validate_token identity
+            description: Validates a JWT and returns the claims
+            operationId: identity#validate_token
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ValidateTokenPayload'
+                        example:
+                            token: Magnam sit numquam.
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ValidationResult'
+                            example:
+                                email: Quos nemo ut qui nulla dolores qui.
+                                reason: Dolore accusamus molestias.
+                                user_id: Occaecati omnis rerum qui sed quo.
+                                valid: true
+components:
+    schemas:
+        Credentials:
+            type: object
+            properties:
+                email:
+                    type: string
+                    example: service@example.com
+                    format: email
+                password:
+                    type: string
+                    example: changeme123
+                    minLength: 8
+            example:
+                email: service@example.com
+                password: changeme123
+            required:
+                - email
+                - password
+        IdentityUser:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    description: Creation timestamp
+                    example: "2001-08-27T12:41:14Z"
+                    format: date-time
+                display_name:
+                    type: string
+                    description: Display name
+                    example: Voluptates fugiat est ut.
+                email:
+                    type: string
+                    description: Email address
+                    example: Sed sequi.
+                id:
+                    type: string
+                    description: User identifier
+                    example: Quod autem eveniet.
+            example:
+                created_at: "2011-11-24T09:33:19Z"
+                display_name: Labore hic rerum sint temporibus laudantium molestiae.
+                email: Velit vero omnis sint voluptatibus.
+                id: Ullam quaerat commodi consequatur nesciunt sunt.
+            required:
+                - id
+                - email
+                - display_name
+                - created_at
+        NotFoundError:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: error identifier
+                    example: identity:not_found
+                message:
+                    type: string
+                    description: description of the failure
+                    example: Tempora non ut necessitatibus amet nihil.
+                temporary:
+                    type: boolean
+                    example: true
+                timeout:
+                    type: boolean
+                    example: true
+            example:
+                id: identity:not_found
+                message: Culpa distinctio mollitia recusandae dolorem.
+                temporary: false
+                timeout: false
+            required:
+                - message
+        RegisterPayload:
+            type: object
+            properties:
+                display_name:
+                    type: string
+                    example: Service Admin
+                    minLength: 3
+                email:
+                    type: string
+                    example: service@example.com
+                    format: email
+                password:
+                    type: string
+                    example: changeme123
+                    minLength: 8
+            example:
+                display_name: Service Admin
+                email: service@example.com
+                password: changeme123
+            required:
+                - display_name
+                - email
+                - password
+        TokenResult:
+            type: object
+            properties:
+                access_token:
+                    type: string
+                    description: JWT access token
+                    example: Fuga deserunt dignissimos perspiciatis repudiandae eveniet reiciendis.
+                expires_in:
+                    type: integer
+                    description: Token expiry window in seconds
+                    example: 2994521055291755
+                    format: int64
+            example:
+                access_token: Nemo reiciendis est aut.
+                expires_in: 9051811792807339431
+            required:
+                - access_token
+                - expires_in
+        UnauthorizedError:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: error identifier
+                    example: identity:unauthorized
+                message:
+                    type: string
+                    description: description of the failure
+                    example: Perspiciatis deserunt exercitationem.
+                temporary:
+                    type: boolean
+                    description: true if the error is temporary
+                    example: true
+                timeout:
+                    type: boolean
+                    description: true if the error is retryable
+                    example: false
+            example:
+                id: identity:unauthorized
+                message: Dolores hic natus qui voluptatem.
+                temporary: false
+                timeout: true
+            required:
+                - message
+        ValidateTokenPayload:
+            type: object
+            properties:
+                token:
+                    type: string
+                    description: JWT access token
+                    example: Eum dolores.
+            example:
+                token: Ipsam deserunt adipisci voluptas velit qui.
+            required:
+                - token
+        ValidationResult:
+            type: object
+            properties:
+                email:
+                    type: string
+                    example: Omnis est.
+                reason:
+                    type: string
+                    example: Mollitia quo.
+                user_id:
+                    type: string
+                    example: Consequatur magnam aut optio.
+                valid:
+                    type: boolean
+                    example: false
+            example:
+                email: Eius dolorem alias et.
+                reason: Architecto rem est qui.
+                user_id: Quaerat ipsum qui sit sed delectus.
+                valid: true
+            required:
+                - valid
+tags:
+    - name: identity
+      description: Operations for user identities

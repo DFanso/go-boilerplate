@@ -1,0 +1,18 @@
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
+
+# Direnv
+.envrc.local
+
+# Binaries
+bin/
+*.exe
+*.out
+*.test
+
+# Logs and runtime
+*.log
+coverage.out
+.tmp/

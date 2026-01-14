@@ -1,0 +1,12 @@
+root = "."
+tmp_dir = "./tmp"
+
+[build]
+  cmd = "go build -o ./bin/identity ./cmd/identity-api"
+  bin = "./bin/identity"
+  args = ["serve"]
+  exclude_dir = ["gen"]
+  include_ext = ["go"]
+
+[color]
+  main = "cyan"
